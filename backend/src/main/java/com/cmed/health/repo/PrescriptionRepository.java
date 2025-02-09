@@ -19,14 +19,12 @@ public interface PrescriptionRepository extends JpaRepository<Prescription,Long>
     @Query(value = "SELECT DATE_FORMAT(p.prescription_date, '%d-%m-%Y') AS formatted_date, COUNT(*) FROM prescription p GROUP BY formatted_date", nativeQuery = true)
     List<Object[]> getDayWisePrescriptionCount();
 
-//    @Query(value = "SELECT p FROM Prescription p WHERE p.prescription_date BETWEEN :startDate AND :endDate", nativeQuery = true)
-//    Page<Prescription> findByDateRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, Pageable pageable);
 
-
-    @Query("SELECT p FROM Prescription p WHERE p.prescriptionDate BETWEEN :startDate AND :endDate")
+    @Query(value = "SELECT * FROM prescription WHERE prescription_date BETWEEN :startDate AND :endDate", nativeQuery = true)
     Page<Prescription> findByDateRange(
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
             Pageable pageable
     );
+
 }

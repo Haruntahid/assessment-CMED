@@ -134,8 +134,8 @@ function EditPrescription() {
                   },
                   min: { value: 1, message: "Age must be at least 1" },
                   max: {
-                    value: 100,
-                    message: "Age cannot be greater than 100",
+                    value: 120,
+                    message: "Age cannot be greater than 120",
                   },
                 })}
                 className="w-full px-4 py-2 border border-gray-400 rounded"

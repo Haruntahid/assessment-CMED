@@ -9,19 +9,20 @@ function Prescription() {
   const [loading, setLoading] = useState(false);
   const [noData, setNoData] = useState(false);
 
+  // Filter states
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
   // Fetch prescriptions
   useEffect(() => {
     setLoading(true);
     setNoData(false);
+
     axios
       .get(`http://localhost:8080/api/v1/prescription`, {
-        params: {
-          page,
-          size: 10,
-        },
+        params: { page, size: 10, startDate, endDate },
       })
       .then((res) => {
-        console.log(res.data.content);
         setPrescriptions(res.data.content);
         setNoData(res.data.content.length === 0);
         setTotalPages(res.data.totalPages);
@@ -29,18 +30,34 @@ function Prescription() {
       .catch((error) => {
         console.error("Error fetching prescriptions:", error);
       })
-      .finally(() => {
-        setLoading(false); // loading false when all the data get
-      });
-  }, [page]);
+      .finally(() => setLoading(false));
+  }, [page, startDate, endDate]);
 
   // Pagination handlers
   const handlePrevPage = () => {
-    if (page > 1) setPage(page - 1);
+    if (page > 1) setPage((prev) => prev - 1);
   };
 
   const handleNextPage = () => {
-    if (page < totalPages) setPage(page + 1);
+    if (page < totalPages) setPage((prev) => prev + 1);
+  };
+
+  // Reset filters
+  const resetFilters = () => {
+    setStartDate("");
+    setEndDate("");
+    setPage(1);
+  };
+
+  // Handle change
+  const handleStartDateChange = (e) => {
+    setStartDate(e.target.value);
+    setPage(1);
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+    setPage(1);
   };
 
   return (
@@ -49,13 +66,41 @@ function Prescription() {
         All Prescriptions
       </h2>
 
-      {/* loading handle */}
+      {/* Filter */}
+      <div className="flex flex-wrap gap-4 items-center justify-center mb-4">
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-600 mb-1">From</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={handleStartDateChange}
+            className="border border-gray-300 p-2 rounded"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-600 mb-1">To</label>
+          <input
+            min={startDate}
+            type="date"
+            value={endDate}
+            onChange={handleEndDateChange}
+            className="border border-gray-300 p-2 rounded"
+          />
+        </div>
+
+        <button
+          onClick={resetFilters}
+          className="ml-auto bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Reset
+        </button>
+      </div>
+
+      {/* Loading and No Data Handling */}
       {loading ? (
-        <>
-          <div className="flex justify-center items-center h-[80vh]">
-            <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin dark:border-blue-500"></div>
-          </div>
-        </>
+        <div className="flex justify-center items-center h-[80vh]">
+          <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin dark:border-blue-500"></div>
+        </div>
       ) : noData ? (
         <div className="text-center text-4xl text-red-500 my-32">
           No prescriptions found.

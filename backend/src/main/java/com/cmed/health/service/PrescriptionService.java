@@ -6,7 +6,6 @@ import com.cmed.health.model.dtos.PrescriptionEditDto;
 import com.cmed.health.model.entity.Prescription;
 import com.cmed.health.model.mapper.PrescriptionMapper;
 import com.cmed.health.repo.PrescriptionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -60,15 +59,14 @@ public class PrescriptionService {
         repository.delete(prescription);
     }
 
-    public Page<Prescription> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<Prescription> findByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        if(startDate != null || endDate != null) {
+            return repository.findByDateRange(startDate, endDate, pageable);
+        }
+        else{
+            return repository.findAll(pageable);
+        }
     }
-
-//    public Page<Prescription> findByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
-//        return repository.findByDateRange(startDate, endDate, pageable);
-//    }
-
-
 
 
     // day wise counter

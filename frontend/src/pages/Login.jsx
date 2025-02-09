@@ -67,9 +67,7 @@ function Login() {
           <h2 className="text-4xl font-bold mb-8 text-center">Login</h2>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">
-              Username or Email
-            </label>
+            <label className="block text-gray-700 mb-2">Username</label>
             <input
               type="text"
               name="username"

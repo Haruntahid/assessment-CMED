@@ -27,7 +27,6 @@ public class AuthController {
        return ApiResponse.success(HttpStatus.CREATED,"Registration successfully");
     }
 
-    // login a user
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginDto dto) {
         service.verify(dto);

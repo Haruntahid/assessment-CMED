@@ -25,8 +25,7 @@ import org.springframework.stereotype.Service;
 public class AuthServices {
 
 
-    @Lazy
-    private AuthenticationManager authManager;
+    private final AuthenticationManager authManager;
     private final UserRepository repository;
     private final UsersMapper mapper;
     private final JWTService jwtService;

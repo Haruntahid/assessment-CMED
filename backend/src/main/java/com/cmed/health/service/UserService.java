@@ -25,7 +25,7 @@ public class UserService implements UserDetailsService {
         Optional<Users> user = repository.findByUsername(username);
 
         if (user.isEmpty()) {
-            throw new ResourceNotFoundException("User Not Found!");
+            throw new ResourceNotFoundException("Invalid Credentials");
         } else return new UserAuth(user.get());
     }
 }
