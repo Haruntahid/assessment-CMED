@@ -1,8 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
 
 function Prescription() {
+  const { token } = useContext(AuthContext);
   const [prescriptions, setPrescriptions] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -21,6 +23,7 @@ function Prescription() {
     axios
       .get(`http://localhost:8080/api/v1/prescription`, {
         params: { page, size: 10, startDate, endDate },
+        headers: `Authorization: Bearer ${token}`,
       })
       .then((res) => {
         setPrescriptions(res.data.content);
@@ -31,7 +34,7 @@ function Prescription() {
         console.error("Error fetching prescriptions:", error);
       })
       .finally(() => setLoading(false));
-  }, [page, startDate, endDate]);
+  }, [page, startDate, endDate, token]);
 
   // Pagination handlers
   const handlePrevPage = () => {

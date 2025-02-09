@@ -6,6 +6,7 @@ import com.cmed.health.model.entity.Prescription;
 import com.cmed.health.response.ApiResponse;
 import com.cmed.health.response.ResponseWithData;
 import com.cmed.health.service.PrescriptionService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -27,6 +29,8 @@ public class PrescriptionController {
     private final PrescriptionService service;
 
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/prescription")
     public Page<Prescription> getAllPrescriptions(
             @RequestParam(defaultValue = "1") int page,
@@ -37,6 +41,7 @@ public class PrescriptionController {
         Pageable pageable = PageRequest.of(page - 1, size);
         return service.findByDateRange(startDate,endDate,pageable);
     }
+
 
 
     @PostMapping("/prescriptions")

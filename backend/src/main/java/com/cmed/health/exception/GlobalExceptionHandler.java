@@ -8,8 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +60,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RestClientException.class)
     public ResponseEntity<ErrorResponse> handleRestClientException(RestClientException ex) {
         return errorBuilder.buildErrorResponse(ex, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ErrorResponse> handleSignatureException(SignatureException ex) {
+        return errorBuilder.buildErrorResponse(ex, HttpStatus.UNAUTHORIZED);
     }
 
 

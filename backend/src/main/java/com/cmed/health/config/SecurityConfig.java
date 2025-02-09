@@ -21,7 +21,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
-import java.util.List;
 
 
 @Configuration
@@ -67,14 +66,17 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return
                 http
-                .csrf(AbstractHttpConfigurer::disable)
+                        .csrf(AbstractHttpConfigurer::disable)
                         .cors(AbstractHttpConfigurer::disable)
                         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(requests -> requests.requestMatchers(PERMIT_ALL).permitAll())
+                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .authorizeHttpRequests(requests -> requests
+                                .requestMatchers("/api/v1/prescription").authenticated()
+                                .requestMatchers(PERMIT_ALL).permitAll()
+                        )
                         .authenticationProvider(authenticationProvider())
                         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                        .build();
     }
 
     @Bean
