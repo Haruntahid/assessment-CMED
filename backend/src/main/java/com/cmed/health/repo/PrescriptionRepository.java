@@ -16,7 +16,10 @@ import java.util.List;
 @Repository
 public interface PrescriptionRepository extends JpaRepository<Prescription,Long> {
 
-    @Query(value = "SELECT DATE_FORMAT(p.prescription_date, '%d-%m-%Y') AS formatted_date, COUNT(*) FROM prescription p GROUP BY formatted_date", nativeQuery = true)
+//    @Query(value = "SELECT DATE_FORMAT(p.prescription_date, '%d-%m-%Y') AS formatted_date, COUNT(*) FROM prescription p GROUP BY formatted_date", nativeQuery = true)
+//    List<Object[]> getDayWisePrescriptionCount();
+
+    @Query(value = "SELECT FORMATDATETIME(p.prescription_date, 'dd-MM-yyyy') AS formatted_date, COUNT(*) FROM prescription p GROUP BY formatted_date", nativeQuery = true)
     List<Object[]> getDayWisePrescriptionCount();
 
 
