@@ -6,12 +6,14 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AuthContext } from "../provider/AuthProvider";
 
-function Login() {
-  const { login, user, loading, setLoading } = useContext(AuthContext);
+function Register() {
+  const { user, loading, setLoading } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const toggleBtn = () => {
@@ -21,21 +23,17 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    const username = e.target.username.value;
-    const password = e.target.password.value;
 
-    const userData = { username, password };
+    const userData = { username, email, password };
     console.log(userData);
 
     axios
-      .post("http://localhost:8080/api/v1/auth/login", userData)
+      .post("http://localhost:8080/api/v1/auth/register", userData)
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
-        if (res.data.token) {
-          login(res.data.token);
-          navigate("/", { replace: true });
+        if (res.data.status == 201) {
           toast.success(res.data.message);
+          navigate("/login", { replace: true });
         }
       })
       .catch((err) => {
@@ -48,7 +46,7 @@ function Login() {
         }
       });
 
-    console.log("Form submitted", name, password);
+    console.log("Form submitted", username, email, password);
   };
 
   useEffect(() => {
@@ -64,14 +62,29 @@ function Login() {
           onSubmit={handleSubmit}
           className="bg-white p-8 rounded-lg shadow-lg w-full"
         >
-          <h2 className="text-4xl font-bold mb-8 text-center">Login</h2>
+          <h2 className="text-4xl font-bold mb-8 text-center">Register</h2>
 
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Username</label>
             <input
               type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               name="username"
               placeholder="Enter your username"
+              className="w-full px-4 py-2 border border-gray-400 rounded"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              placeholder="Enter your email"
               className="w-full px-4 py-2 border border-gray-400 rounded"
               required
             />
@@ -82,9 +95,9 @@ function Login() {
             <input
               name="password"
               type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
               className="w-full px-4 py-2 border border-gray-400 rounded"
               required
             />
@@ -121,16 +134,16 @@ function Login() {
             {loading ? (
               <BiLoaderAlt className="animate-spin mx-auto" size={20} />
             ) : (
-              "Login"
+              "Register"
             )}
           </button>
 
-          {/* register section */}
+          {/* login section */}
           <div>
             <p className="text-center mt-5">
-              New here?{" "}
-              <Link className="text-blue-600 font-semibold" to={"/register"}>
-                Register
+              Already have an account?{" "}
+              <Link className="text-blue-600 font-semibold" to={"/login"}>
+                Login
               </Link>
             </p>
           </div>
@@ -140,4 +153,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

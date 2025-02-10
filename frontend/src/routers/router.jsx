@@ -7,6 +7,7 @@ import CreatePrescription from "../pages/CreatePrescription";
 import PrivateRoute from "./PrivateRoute";
 import PrescriptionDetails from "../pages/PrescriptionDetails";
 import EditPrescription from "../components/EditPrescription";
+import Register from "../pages/Register";
 
 export const router = createBrowserRouter([
   {
@@ -46,5 +47,9 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
 ]);
