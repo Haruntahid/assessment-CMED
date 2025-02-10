@@ -1,10 +1,12 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { AuthContext } from "../provider/AuthProvider";
 
 function CreatePrescription() {
+  const { token } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -21,7 +23,11 @@ function CreatePrescription() {
     console.log("Form Data:", data);
 
     axios
-      .post("http://localhost:8080/api/v1/prescriptions", data)
+      .post("http://localhost:8080/api/v1/prescriptions", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         if (res.data.status == 201) {
           Swal.fire({
@@ -37,7 +43,6 @@ function CreatePrescription() {
       })
       .catch((error) => {
         if (error.response && error.response.data) {
-          // console.log(error.response.data);
           Swal.fire({
             icon: "error",
             title: "Error",

@@ -68,7 +68,6 @@ public class PrescriptionService {
             LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
             LocalDate todayDate = LocalDate.now();
 
-            System.out.println("today date "+todayDate);
             return repository.findByDateRange(firstDayOfMonth, todayDate, pageable);
         }else {
             return repository.findByDateRange(startDate, endDate, pageable);

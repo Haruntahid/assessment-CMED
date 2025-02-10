@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -29,32 +28,33 @@ public class PrescriptionController {
     private final PrescriptionService service;
 
 
-//    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/prescription")
     public Page<Prescription> getAllPrescriptions(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(name = "startDate",required = false)  LocalDate startDate,
-            @RequestParam(name = "endDate", required = false)  LocalDate endDate
-            ) {
+            @RequestParam(name = "startDate", required = false) LocalDate startDate,
+            @RequestParam(name = "endDate", required = false) LocalDate endDate
+    ) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        return service.findByDateRange(startDate,endDate,pageable);
+        return service.findByDateRange(startDate, endDate, pageable);
     }
 
 
-
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/prescriptions")
     public ResponseEntity<ApiResponse> savePrescription(@Valid @RequestBody PrescriptionDto dto) {
         service.savePrescription(dto);
         return ApiResponse.success(HttpStatus.CREATED, "Prescription Created");
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @PatchMapping("/prescriptions/{id}")
     public ResponseEntity<ApiResponse> editPrescription(@PathVariable Long id, @Valid @RequestBody PrescriptionEditDto dto) {
         service.editPrescription(id, dto);
         return ApiResponse.success(HttpStatus.OK, "Prescription Updated");
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/prescriptions/{id}")
     public ResponseEntity<ApiResponse> deletePrescription(@PathVariable Long id) {
         service.deletePrescription(id);

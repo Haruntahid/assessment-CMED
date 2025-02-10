@@ -1,10 +1,8 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../provider/AuthProvider";
 
 function Prescription() {
-  const { token } = useContext(AuthContext);
   const [prescriptions, setPrescriptions] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -51,7 +49,7 @@ function Prescription() {
         console.error("Error fetching prescriptions:", error);
       })
       .finally(() => setLoading(false));
-  }, [page, startDate, endDate, token]);
+  }, [page, startDate, endDate]);
 
   // Pagination handlers
   const handlePrevPage = () => {

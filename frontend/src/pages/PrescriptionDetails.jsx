@@ -8,10 +8,13 @@ import {
 import { GiMedicines, GiHealthNormal } from "react-icons/gi";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../provider/AuthProvider";
 
 function PrescriptionDetails() {
   const { data } = useLoaderData();
   const navigate = useNavigate();
+  const { token } = useContext(AuthContext);
 
   // Placeholder for delete function
   const handleDelete = (id) => {
@@ -26,7 +29,11 @@ function PrescriptionDetails() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:8080/api/v1/prescriptions/${id}`)
+          .delete(`http://localhost:8080/api/v1/prescriptions/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
           .then((res) => {
             if (res.data) {
               Swal.fire({

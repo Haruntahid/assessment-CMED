@@ -1,10 +1,12 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { AuthContext } from "../provider/AuthProvider";
 
 function EditPrescription() {
+  const { token } = useContext(AuthContext);
   const [data, setData] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -41,7 +43,11 @@ function EditPrescription() {
 
   const onSubmit = (formData) => {
     axios
-      .patch(`http://localhost:8080/api/v1/prescriptions/${id}`, formData)
+      .patch(`http://localhost:8080/api/v1/prescriptions/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         console.log(res.data.data);
         console.log(res);
