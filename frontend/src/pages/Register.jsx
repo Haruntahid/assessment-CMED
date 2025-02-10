@@ -40,7 +40,7 @@ function Register() {
         setLoading(false);
         // error message
         if (err.response && err.response.data.message) {
-          setErrorMessage(err.response.data.message);
+          setErrorMessage(err.response.data.errors);
         } else {
           setErrorMessage("Something went wrong. Please try again.");
         }
