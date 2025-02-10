@@ -1,6 +1,4 @@
 package com.cmed.health.model.dtos;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +10,7 @@ import java.util.Date;
 public class PrescriptionDto {
 
     @NotNull(message = "Prescription date cannot be null")
+    @PastOrPresent(message = "Prescription date cannot be in the future")
     private Date prescriptionDate;
 
     @NotNull(message = "Patient name cannot be null")

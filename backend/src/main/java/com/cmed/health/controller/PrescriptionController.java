@@ -29,8 +29,7 @@ public class PrescriptionController {
     private final PrescriptionService service;
 
 
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("isAuthenticated()")
+//    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/prescription")
     public Page<Prescription> getAllPrescriptions(
             @RequestParam(defaultValue = "1") int page,

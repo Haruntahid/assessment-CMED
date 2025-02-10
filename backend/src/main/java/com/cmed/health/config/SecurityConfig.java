@@ -71,7 +71,7 @@ public class SecurityConfig {
                         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .authorizeHttpRequests(requests -> requests
-                                .requestMatchers("/api/v1/prescription").authenticated()
+                                // .requestMatchers("/api/v1/prescription").authenticated()
                                 .requestMatchers(PERMIT_ALL).permitAll()
                         )
                         .authenticationProvider(authenticationProvider())

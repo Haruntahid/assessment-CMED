@@ -15,6 +15,24 @@ function Prescription() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
+  const getStartOfMonth = () => {
+    const today = new Date();
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    firstDay.setHours(0, 0, 0, 0);
+    return firstDay.toLocaleDateString("en-CA");
+  };
+
+  const getToday = () => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  };
+
+  // Set default date values
+  useEffect(() => {
+    setStartDate(getStartOfMonth());
+    setEndDate(getToday());
+  }, []);
+
   // Fetch prescriptions
   useEffect(() => {
     setLoading(true);
@@ -23,7 +41,6 @@ function Prescription() {
     axios
       .get(`http://localhost:8080/api/v1/prescription`, {
         params: { page, size: 10, startDate, endDate },
-        headers: `Authorization: Bearer ${token}`,
       })
       .then((res) => {
         setPrescriptions(res.data.content);
@@ -45,10 +62,10 @@ function Prescription() {
     if (page < totalPages) setPage((prev) => prev + 1);
   };
 
-  // Reset filters
+  // Reset filters and trigger the API call
   const resetFilters = () => {
-    setStartDate("");
-    setEndDate("");
+    setStartDate(getStartOfMonth());
+    setEndDate(getToday());
     setPage(1);
   };
 

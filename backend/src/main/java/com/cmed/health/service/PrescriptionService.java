@@ -9,11 +9,14 @@ import com.cmed.health.repo.PrescriptionRepository;
 import org.springframework.data.domain.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,12 +62,16 @@ public class PrescriptionService {
         repository.delete(prescription);
     }
 
+
     public Page<Prescription> findByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
-        if(startDate != null || endDate != null) {
+        if(startDate == null || endDate == null) {
+            LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
+            LocalDate todayDate = LocalDate.now();
+
+            System.out.println("today date "+todayDate);
+            return repository.findByDateRange(firstDayOfMonth, todayDate, pageable);
+        }else {
             return repository.findByDateRange(startDate, endDate, pageable);
-        }
-        else{
-            return repository.findAll(pageable);
         }
     }
 
