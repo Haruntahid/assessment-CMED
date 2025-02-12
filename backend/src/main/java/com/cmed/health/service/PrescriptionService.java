@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
+import java.time.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,16 +62,25 @@ public class PrescriptionService {
     }
 
 
-    public Page<Prescription> findByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
-        if(startDate == null || endDate == null) {
-            LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-            LocalDate todayDate = LocalDate.now();
+    public Page<Prescription> findByDateRange(Long startDate, Long endDate, Pageable pageable) {
+        if (startDate == null || endDate == null) {
+            LocalDateTime firstDayOfMonth = LocalDate.now().withDayOfMonth(1).atTime(0, 0, 0);
+            LocalDateTime todayDate = LocalDate.now().atTime(23, 59, 59, 999999999);
 
             return repository.findByDateRange(firstDayOfMonth, todayDate, pageable);
-        }else {
-            return repository.findByDateRange(startDate, endDate, pageable);
+        } else {
+            // Convert milliseconds to LocalDateTime
+            LocalDateTime first = Instant.ofEpochMilli(startDate)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+            LocalDateTime end = Instant.ofEpochMilli(endDate)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+
+            return repository.findByDateRange(first, end, pageable);
         }
     }
+
 
 
     // day wise counter

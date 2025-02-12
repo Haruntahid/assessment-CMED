@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +33,8 @@ public class PrescriptionController {
     public Page<Prescription> getAllPrescriptions(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(name = "startDate", required = false) LocalDate startDate,
-            @RequestParam(name = "endDate", required = false) LocalDate endDate
+            @RequestParam(name = "startDate", required = false) Long startDate,
+            @RequestParam(name = "endDate", required = false) Long endDate
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
         return service.findByDateRange(startDate, endDate, pageable);
