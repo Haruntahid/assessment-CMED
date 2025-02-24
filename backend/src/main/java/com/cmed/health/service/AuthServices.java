@@ -8,16 +8,9 @@ import com.cmed.health.model.entity.Users;
 import com.cmed.health.model.mapper.UsersMapper;
 import com.cmed.health.repo.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,7 +26,7 @@ public class AuthServices {
 
     public void register(RegisterDto dto) {
         Users user = mapper.map(dto);
-        if(repository.findByUsername(user.getUsername()).isPresent() || repository.findByEmail(user.getEmail()).isPresent()) {
+        if (repository.findByUsername(user.getUsername()).isPresent() || repository.findByEmail(user.getEmail()).isPresent()) {
             throw new AlreadyExistException("User Already Exists With This Email or Username");
         }
         repository.save(user);
@@ -45,13 +38,15 @@ public class AuthServices {
                 new UsernamePasswordAuthenticationToken(
                         dto.getUsername(),
                         dto.getPassword())
-
         );
+
         if (authentication.isAuthenticated()) {
             return jwtService.generateToken(dto.getUsername());
         } else {
             throw new UserNotFoundException("Invalid Username or Password");
         }
-    };
+    }
+
+    ;
 
 }

@@ -1,6 +1,7 @@
 package com.cmed.health.config;
 
-import lombok.AllArgsConstructor;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,9 +21,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.Collections;
 
 
+
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
@@ -31,20 +33,14 @@ public class SecurityConfig {
 
     final String[] PERMIT_ALL = {
             "/api/v1/auth/**",
-            "/api/v1/users/welcome",
             "/swagger-ui/**",
             "/swagger-ui.html/**",
             "/swagger-resources/**",
             "/api-docs/**",
             "/v2/api-docs/**",
             "/v3/api-docs/**",
-            "/webjars/**",
-            "/api/v1/privileges/**",
-            "/api/v1/permission/**",
-            "/api/v1/permission",
-            "/api/v1/roles/**",
-            "/api/v1/roles",
-            "api/v1/**"
+            "/h2-console/**",
+            "/api/v1/**"
     };
 
 
@@ -68,7 +64,7 @@ public class SecurityConfig {
                         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .authorizeHttpRequests(requests -> requests
-                                 .requestMatchers("/api/v1/prescriptions/**").authenticated()
+                                .requestMatchers("/api/v1/prescriptions/**").authenticated()
                                 .requestMatchers(PERMIT_ALL).permitAll()
                         )
                         .authenticationProvider(authenticationProvider())

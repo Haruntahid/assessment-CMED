@@ -9,10 +9,8 @@ import com.cmed.health.repo.PrescriptionRepository;
 import org.springframework.data.domain.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.*;
@@ -99,7 +97,7 @@ public class PrescriptionService {
     //external api
     public Object getDataFromExternalApi() {
         String url = "https://rxnav.nlm.nih.gov/REST/interaction/interaction.json?rxcui=341248";
-        ResponseEntity<?> response = restTemplate.getForEntity(url, Object.class);
+        ResponseEntity<Object> response = restTemplate.getForEntity(url, Object.class);
         return response.getBody();
     }
 }

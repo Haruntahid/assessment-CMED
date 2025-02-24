@@ -23,7 +23,6 @@ public interface PrescriptionRepository extends JpaRepository<Prescription,Long>
             nativeQuery = true)
     List<Object[]> getDayWisePrescriptionCount();
 
-
     @Query(value = "SELECT * FROM prescription WHERE prescription_date BETWEEN :startDate AND :endDate ORDER BY prescription_date ASC", nativeQuery = true)
     Page<Prescription> findByDateRange(
             @Param("startDate") LocalDateTime startDate,
